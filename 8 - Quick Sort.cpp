@@ -93,3 +93,30 @@ int main()
 
     return 0;
 }
+
+/*
+Quick Sort Explanation:
+
+- **Quick Sort** is a **divide and conquer** sorting algorithm that works by selecting a "pivot" element from the array and partitioning the other elements into two sub-arrays, according to whether they are smaller or greater than the pivot. The sub-arrays are then sorted recursively.
+
+- **Partition**: The array is rearranged so that elements smaller than the pivot are placed on the left side, and elements larger than the pivot are placed on the right side. The pivot is then placed in its correct position.
+
+- **Recursion**: The process is recursively applied to the left and right sub-arrays until the entire array is sorted.
+
+Time Complexity of Quick Sort:
+- **Best and Average Case**: The time complexity of quick sort in the best and average cases is **O(N log N)**, where N is the number of elements. This is because the partitioning process divides the array into two nearly equal halves, and each level of recursion takes linear time to process.
+  
+- **Worst Case**: The worst-case time complexity of quick sort is **O(N^2)**, which happens when the pivot is always the smallest or largest element (i.e., when the array is already sorted or nearly sorted). This leads to unbalanced partitioning, resulting in recursion depths proportional to N.
+
+- **Space Complexity**: Quick Sort has a space complexity of **O(log N)**, as the recursion stack stores intermediate results. In the worst case, the space complexity can be **O(N)**.
+
+Advantages of Quick Sort:
+- Quick Sort is typically faster in practice than other O(N log N) algorithms, such as Merge Sort, due to its smaller constant factors.
+- It sorts in place, requiring only a small amount of additional memory.
+
+Disadvantages of Quick Sort:
+- Quick Sort's worst-case time complexity is **O(N^2)**, which can be avoided by choosing a good pivot.
+- It is not stable (i.e., equal elements may not maintain their original relative order).
+
+Overall, Quick Sort is efficient and widely used for large datasets when the average case performance is considered.
+*/
