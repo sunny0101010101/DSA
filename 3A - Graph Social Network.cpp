@@ -8,40 +8,47 @@
 
 using namespace std;
 
+// Structure to store date information
 struct Date {
     int day, month, year;
 };
 
+// Class representing a User in the social network
 class User {
 public:
-    string name;
-    Date dob; // date of birth
-    int comments;
+    string name; // User's name
+    Date dob; // User's date of birth
+    int comments; // Number of comments made by the user
 
+    // Constructor to initialize a User object
     User(string n, Date d, int c) : name(n), dob(d), comments(c) {}
 };
 
+// Class representing the Social Network
 class SocialNetwork {
 private:
-    unordered_map<int, User*> users; // stores users by ID
-    unordered_map<int, vector<int>> adjacencyList; // adjacency list to represent graph
+    unordered_map<int, User*> users; // Map of user IDs to User objects
+    unordered_map<int, vector<int>> adjacencyList; // Adjacency list to represent friendships
 
 public:
+    // Add a new user to the social network
     void addUser(int id, string name, Date dob, int comments) {
         users[id] = new User(name, dob, comments);
     }
 
+    // Add a friendship between two users
     void addFriendship(int id1, int id2) {
         adjacencyList[id1].push_back(id2);
         adjacencyList[id2].push_back(id1);
     }
 
+    // Find and print the user with the maximum number of friends
     void findUserWithMaxFriends() {
         int maxFriends = 0;
         int userIdWithMaxFriends = -1;
-        
+
         for (const auto& user : adjacencyList) {
-            int friendCount = user.second.size();
+            int friendCount = user.second.size(); // Count friends of the user
             if (friendCount > maxFriends) {
                 maxFriends = friendCount;
                 userIdWithMaxFriends = user.first;
@@ -49,10 +56,13 @@ public:
         }
 
         if (userIdWithMaxFriends != -1) {
-            cout << "User with maximum friends: " << users[userIdWithMaxFriends]->name << " with " << maxFriends << " friends.\n";
+            cout << "User with maximum friends: " 
+                 << users[userIdWithMaxFriends]->name 
+                 << " with " << maxFriends << " friends.\n";
         }
     }
 
+    // Find and print users with the maximum and minimum comments
     void findUsersWithMaxAndMinComments() {
         if (users.empty()) return;
 
@@ -73,43 +83,53 @@ public:
             }
         }
 
-        cout << "User with maximum comments: " << userWithMaxComments->name << " with " << maxComments << " comments.\n";
-        cout << "User with minimum comments: " << userWithMinComments->name << " with " << minComments << " comments.\n";
+        cout << "User with maximum comments: " 
+             << userWithMaxComments->name 
+             << " with " << maxComments << " comments.\n";
+        cout << "User with minimum comments: " 
+             << userWithMinComments->name 
+             << " with " << minComments << " comments.\n";
     }
 
+    // Find and print users whose birthday is in the current month
     void findUsersWithBirthdayThisMonth() {
         time_t now = time(0);
         tm *ltm = localtime(&now);
-        int currentMonth = 1 + ltm->tm_mon;
+        int currentMonth = 1 + ltm->tm_mon; // Get the current month
 
         cout << "Users with birthdays in this month:\n";
         for (const auto& userPair : users) {
             if (userPair.second->dob.month == currentMonth) {
-                cout << userPair.second->name << " has a birthday on " << userPair.second->dob.day << "/" << userPair.second->dob.month << "\n";
+                cout << userPair.second->name 
+                     << " has a birthday on " 
+                     << userPair.second->dob.day 
+                     << "/" << userPair.second->dob.month << "\n";
             }
         }
     }
 
+    // Perform Depth-First Search (DFS) traversal from a given user ID
     void DFS(int startId) {
-        unordered_map<int, bool> visited;
-        DFSUtil(startId, visited);
+        unordered_map<int, bool> visited; // Track visited users
+        DFSUtil(startId, visited); // Helper function
     }
 
+    // Perform Breadth-First Search (BFS) traversal from a given user ID
     void BFS(int startId) {
-        unordered_map<int, bool> visited;
+        unordered_map<int, bool> visited; // Track visited users
         queue<int> queue;
 
-        visited[startId] = true;
+        visited[startId] = true; // Mark start user as visited
         queue.push(startId);
 
         while (!queue.empty()) {
             int id = queue.front();
-            cout << users[id]->name << " ";
+            cout << users[id]->name << " "; // Print user name
             queue.pop();
 
             for (int friendId : adjacencyList[id]) {
                 if (!visited[friendId]) {
-                    visited[friendId] = true;
+                    visited[friendId] = true; // Mark friend as visited
                     queue.push(friendId);
                 }
             }
@@ -118,9 +138,10 @@ public:
     }
 
 private:
+    // Helper function for DFS traversal
     void DFSUtil(int id, unordered_map<int, bool>& visited) {
-        visited[id] = true;
-        cout << users[id]->name << " ";
+        visited[id] = true; // Mark user as visited
+        cout << users[id]->name << " "; // Print user name
 
         for (int friendId : adjacencyList[id]) {
             if (!visited[friendId]) {
@@ -137,6 +158,7 @@ int main() {
     cout << "Enter the number of users: ";
     cin >> numUsers;
 
+    // Input user details
     for (int i = 0; i < numUsers; ++i) {
         int id, comments;
         string name;
@@ -157,6 +179,7 @@ int main() {
     cout << "Enter the number of friendships: ";
     cin >> numFriendships;
 
+    // Input friendship details
     for (int i = 0; i < numFriendships; ++i) {
         int id1, id2;
         cout << "Enter the IDs of the two friends: ";
@@ -165,6 +188,7 @@ int main() {
         sn.addFriendship(id1, id2);
     }
 
+    // Menu-driven options
     int choice;
     do {
         cout << "\nMenu:\n";
@@ -196,4 +220,3 @@ int main() {
 
     return 0;
 }
-
